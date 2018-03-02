@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="CircleFollowPathAnimationView">
+
+        <attr name="circular_big" format="color" />
+        <attr name="circular_middle" format="color" />
+        <attr name="circular_little" format="color" />
+
+        <attr name="circle_big_stroke" format="color" />
+        <attr name="circle_middle_stroke" format="color" />
+        <attr name="circle_little_stroke" format="color" />
+
+        <attr name="circle_fill_1" format="color" />
+        <attr name="circle_fill_2" format="color" />
+        <attr name="circle_fill_3" format="color" />
+
+        <attr name="circle2ToCircle1_distance" format="integer" />
+        <attr name="circle3ToCircle2_distance" format="integer" />
+
+    </declare-styleable>
+
+</resources>
