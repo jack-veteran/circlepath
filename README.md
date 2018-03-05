@@ -122,8 +122,23 @@ PathMeasure介绍<br>
 	
 ```java
 dependencies {
-	        compile 'com.github.jack-veteran:circlepath:1.0.0'
+	       compile 'com.github.jack-veteran:circlepath:1.0.2'
 	}
 ```
+# Attributes
+-------------
+|name	|format	|description|
+|-------|-------|-----------|
+|circular_big| color| 大圆环的颜色
+|circular_middle| color| 中圆环的颜色
+|circular_little| color| 小圆环的颜色
+|circle_big_stroke| color| 大圆边线颜色
+|circle_middle_stroke| color| 中圆边线颜色
+|circle_little_stroke| color| 小圆边线颜色
+|circle_fill_1| color| 沿着大圆移动的小圆
+|circle_fill_2| color| 沿着中圆移动的小圆
+|circle_fill_3| color| 沿着小圆移动的小圆
+|circle2ToCircle1_distance| integer| 中圆离大圆的距离（值在9-3之间）
+|circle3ToCircle2_distance| integer| 小圆离中圆的距离（值在9-3之间）
   
 
