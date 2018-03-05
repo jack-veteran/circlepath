@@ -170,20 +170,24 @@ public class CircleFollowPathAnimationView extends View {
         viewWidth = w;
         viewHeight = h;
 
-//        RectF rectF = new RectF(w / 9, h / 9
-//                , w / 9 * 8 , h / 9 * 8 );
-//        RectF rectF1 = new RectF(w / 4, h / 4
-//                , w / 4 * 3 , h / 4 * 3 );
+        // RectF（）中4个参数：left top right bottom
+        //思路：可以把圆看成，是在一个矩形中画出来的
+        // left top = 矩形左上角的（x，y）； right bottom = 矩形右下角的（x，y）
+        RectF rectF = new RectF(w / 9, h / 9
+                , w / 9 * 8, h / 9 * 8);
+        RectF rectF1 = new RectF(w / 4, h / 4
+                , w / 4 * 3, h / 4 * 3);
 
-        rectF = new RectF(w / circle2ToCircle1_distance, h / circle2ToCircle1_distance
-                , w / circle2ToCircle1_distance * (circle2ToCircle1_distance - 1), h / circle2ToCircle1_distance * (circle2ToCircle1_distance - 1));
-        rectF1 = new RectF(w / circle3ToCircle2_distance, h / circle3ToCircle2_distance
-                , w / circle3ToCircle2_distance * (circle3ToCircle2_distance - 1), h / circle3ToCircle2_distance * (circle3ToCircle2_distance - 1));
+//        rectF = new RectF(w / circle2ToCircle1_distance, h / circle2ToCircle1_distance
+//                , w / circle2ToCircle1_distance * (circle2ToCircle1_distance - 1), h / circle2ToCircle1_distance * (circle2ToCircle1_distance - 1));
+//        rectF1 = new RectF(w / circle3ToCircle2_distance, h / circle3ToCircle2_distance
+//                , w / circle3ToCircle2_distance * (circle3ToCircle2_distance - 1), h / circle3ToCircle2_distance * (circle3ToCircle2_distance - 1));
 
-        bigPath1.addArc(new RectF(radius, radius, w - radius, h - radius), 0, 360);
-        bigPath2.addArc(rectF, 0, 360);
-        bigPath3.addArc(rectF1, 0, 360);
+        bigPath1.addArc(new RectF(radius, radius, w - radius, h - radius), 0, 360);  // 最大的圆
+        bigPath2.addArc(rectF, 0, 360);  // 第二大的圆
+        bigPath3.addArc(rectF1, 0, 360); // 最小的圆
 
+        // 同上，这个是为了计算，3个圆圈上移动过程中的（X，Y）坐标，所以这个是关键
         measurePath1.addArc(new RectF(radius, radius, w - radius, h - radius), -90, 359);
         measurePath2.addArc(rectF, -90, 359);
         measurePath3.addArc(rectF1, -90, 359);
@@ -194,37 +198,41 @@ public class CircleFollowPathAnimationView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
+        // 3个大圆
         canvas.drawPath(bigPath1, bigCirclePaint1);
         canvas.drawPath(bigPath2, bigCirclePaint2);
         canvas.drawPath(bigPath3, bigCirclePaint3);
-
+        // 3个大圆的边线
         canvas.drawPath(bigPath1, strokePaint1);
         canvas.drawPath(bigPath2, strokePaint2);
         canvas.drawPath(bigPath3, strokePaint3);
 
         if (littleCircleX1 == 0 && littleCircleY1 == 0)
             startAnimation();
-
+        // 3个不同（x，y）坐标的小圆，radius = 半径，littleCirclePaint1 = 画笔
         canvas.drawCircle(littleCircleX1, littleCircleY1, radius, littleCirclePaint1);
         canvas.drawCircle(littleCircleX2, littleCircleY2, radius, littleCirclePaint2);
         canvas.drawCircle(littleCircleX3, littleCircleY3, radius, littleCirclePaint3);
     }
 
     public void startAnimation() {
+        // PathMeasure是一个用来测量Path的类
         pathMeasure1 = new PathMeasure(measurePath1, false);
+        // 动画执行 值变化的范围
         valueAnimator1 = ValueAnimator.ofFloat(0, pathMeasure1.getLength());
         valueAnimator1.setRepeatCount(ValueAnimator.INFINITE);
         valueAnimator1.setDuration(1000 * 4);
-        valueAnimator1.setInterpolator(new LinearInterpolator());
+        valueAnimator1.setInterpolator(new LinearInterpolator());  // 插值器
         valueAnimator1.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 float value = (float) valueAnimator.getAnimatedValue();
+                // onAnimationUpdate 会执行很多次
+                // 获取指定长度的位置坐标及该点切线值 ， currentXY_1 = x y 值（小圆的中心点坐标），tan_1 = 切线值 暂时不用
                 pathMeasure1.getPosTan(value, currentXY_1, tan_1);
                 littleCircleX1 = currentXY_1[0];
                 littleCircleY1 = currentXY_1[1];
-                invalidate();
+                invalidate();  // 每次调用都会走 onDraw 所有 小圆就动了
             }
         });
 
