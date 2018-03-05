@@ -2,11 +2,11 @@
 
 自定义Path动画
 ==
-先放个效果图看看
-小球沿着圆形轨迹运动，感兴趣的朋友，可以下载源码看看。
-起因：
-我是做蓝牙开发的，就是蓝牙智能锁，项目需要一个‘添加钥匙’效果这个东西很简单，很基础的知识。
-如果你是大神，小弟献丑了，如果你想学习Path建议看看，代码不多，但是简单容易理解。
+先放个效果图看看<br>
+小球沿着圆形轨迹运动，感兴趣的朋友，可以下载源码看看。<br>
+* 起因：
+    * 我是做蓝牙开发的，就是蓝牙智能锁，项目需要一个‘添加钥匙’效果这个东西很简单，很基础的知识。
+    * 如果你是大神，小弟献丑了，如果你想学习Path建议看看，代码不多，但是简单容易理解。
 
 ![](https://github.com/jack-veteran/circlepath/raw/master/screenshot/device.png)
 
@@ -73,8 +73,51 @@
 3：最后是动画部分，3个小圆沿着3个大圆运动，其实本质就是移动3个小圆的 x y 坐标，所以计算x y 坐标是关键。
 
 ```java
-
-
+ public void startAnimation() {
+        // PathMeasure是一个用来测量Path的类
+        pathMeasure1 = new PathMeasure(measurePath1, false);
+        // 动画执行 值变化的范围
+        valueAnimator1 = ValueAnimator.ofFloat(0, pathMeasure1.getLength());
+        valueAnimator1.setRepeatCount(ValueAnimator.INFINITE);
+        valueAnimator1.setDuration(1000 * 4);
+        valueAnimator1.setInterpolator(new LinearInterpolator());  // 插值器
+        valueAnimator1.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                float value = (float) valueAnimator.getAnimatedValue();
+                // onAnimationUpdate 会执行很多次
+                // 获取指定长度的位置坐标及该点切线值 ， currentXY_1 = x y 值（小圆的中心点坐标），tan_1 = 切线值 暂时不用
+                pathMeasure1.getPosTan(value, currentXY_1, tan_1);
+                littleCircleX1 = currentXY_1[0];
+                littleCircleY1 = currentXY_1[1];
+                invalidate();  // 每次调用都会走 onDraw 所有 小圆就动了
+            }
+        });
+  }
 ```
 
+## 知识扩展：<br>
+PathMeasure介绍<br>
+
+构造方法:
+
+| 方法名 | 释义 | 
+| --------- | ---------|
+| PathMeasure() | 创建一个空的PathMeasure | 
+| PathMeasure(Path path, boolean forceClosed) | 创建 PathMeasure 并关联一个指定的Path(Path需要已经创建完成)。| <br>
+
+公共方法：
+
+| 返回值 | 方法名 | 释义 |
+| ------ | --------|------|
+| void | setPath(Path path, boolean forceClosed) | 关联一个Path |
+| boolean	|isClosed()	|是否闭合 |
+| float	|getLength()	|获取Path的长度 |
+| boolean	|nextContour()	|跳转到下一个轮廓 |
+| boolean	|getSegment(float startD, float stopD, Path dst, boolean startWithMoveTo)	|截取片段 |
+| boolean	|getPosTan(float distance, float[] pos, float[] tan)	|获取指定长度的位置坐标及该点切线值 |
+| boolean	|getMatrix(float distance, Matrix matrix, int flags)	|获取指定长度的位置坐标及该点Matrix |
+
+
+  
 
