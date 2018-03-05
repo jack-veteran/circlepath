@@ -118,6 +118,12 @@ PathMeasure介绍<br>
 | boolean	|getPosTan(float distance, float[] pos, float[] tan)	|获取指定长度的位置坐标及该点切线值 |
 | boolean	|getMatrix(float distance, Matrix matrix, int flags)	|获取指定长度的位置坐标及该点Matrix |
 
-
+# 如何使用
+	
+```java
+dependencies {
+	        compile 'com.github.jack-veteran:circlepath:1.0.0'
+	}
+```
   
 
