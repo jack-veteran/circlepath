@@ -173,15 +173,15 @@ public class CircleFollowPathAnimationView extends View {
         // RectF（）中4个参数：left top right bottom
         //思路：可以把圆看成，是在一个矩形中画出来的
         // left top = 矩形左上角的（x，y）； right bottom = 矩形右下角的（x，y）
-        RectF rectF = new RectF(w / 9, h / 9
-                , w / 9 * 8, h / 9 * 8);
-        RectF rectF1 = new RectF(w / 4, h / 4
-                , w / 4 * 3, h / 4 * 3);
+//        RectF rectF = new RectF(w / 9, h / 9
+//                , w / 9 * 8, h / 9 * 8);
+//        RectF rectF1 = new RectF(w / 4, h / 4
+//                , w / 4 * 3, h / 4 * 3);
 
-//        rectF = new RectF(w / circle2ToCircle1_distance, h / circle2ToCircle1_distance
-//                , w / circle2ToCircle1_distance * (circle2ToCircle1_distance - 1), h / circle2ToCircle1_distance * (circle2ToCircle1_distance - 1));
-//        rectF1 = new RectF(w / circle3ToCircle2_distance, h / circle3ToCircle2_distance
-//                , w / circle3ToCircle2_distance * (circle3ToCircle2_distance - 1), h / circle3ToCircle2_distance * (circle3ToCircle2_distance - 1));
+        rectF = new RectF(w / circle2ToCircle1_distance, h / circle2ToCircle1_distance
+                , w / circle2ToCircle1_distance * (circle2ToCircle1_distance - 1), h / circle2ToCircle1_distance * (circle2ToCircle1_distance - 1));
+        rectF1 = new RectF(w / circle3ToCircle2_distance, h / circle3ToCircle2_distance
+                , w / circle3ToCircle2_distance * (circle3ToCircle2_distance - 1), h / circle3ToCircle2_distance * (circle3ToCircle2_distance - 1));
 
         bigPath1.addArc(new RectF(radius, radius, w - radius, h - radius), 0, 360);  // 最大的圆
         bigPath2.addArc(rectF, 0, 360);  // 第二大的圆
